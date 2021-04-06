@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/test/player/player.gd" type="Script" id=1]
 [ext_resource path="res://src/test/player/player_camera.gd" type="Script" id=2]
+[ext_resource path="res://assets/textures/ball-texture.png" type="Texture" id=3]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.94902, 0.854902, 0.027451, 1 )
+albedo_texture = ExtResource( 3 )
 
 [sub_resource type="SphereMesh" id=2]
 material = SubResource( 1 )
@@ -19,8 +21,11 @@ transform = Transform( -1.62921e-07, -0.5, 0.866025, 0, 0.866025, 0.5, -1, 8.146
 current = true
 fov = 90.0
 
-[node name="RigidPlayer" type="RigidBody" parent="."]
+[node name="RigidPlayer" type="RigidBody" parent="." groups=[
+"Player",
+]]
 mass = 5.0
+gravity_scale = 3.0
 script = ExtResource( 1 )
 
 [node name="Ball" type="MeshInstance" parent="RigidPlayer"]

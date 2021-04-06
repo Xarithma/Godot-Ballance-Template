@@ -1,65 +1,82 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/dynamic_fonts/title.tres" type="DynamicFont" id=1]
-[ext_resource path="res://src/dynamic_fonts/general.tres" type="DynamicFont" id=2]
+[ext_resource path="res://src/test/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/main_menu/main_menu.gd" type="Script" id=3]
-[ext_resource path="res://src/test/levels/level_01.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/test/level_elements/level_transition.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/main_menu/start_game.gd" type="Script" id=5]
 
-[sub_resource type="StyleBoxEmpty" id=1]
+[sub_resource type="PlaneMesh" id=1]
+size = Vector2( 15, 15 )
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="ConcavePolygonShape" id=2]
+data = PoolVector3Array( 7.5, 0, 7.5, -7.5, 0, 7.5, 7.5, 0, -7.5, -7.5, 0, 7.5, -7.5, 0, -7.5, 7.5, 0, -7.5 )
 
-[sub_resource type="StyleBoxEmpty" id=3]
+[sub_resource type="Environment" id=3]
+ambient_light_color = Color( 1, 1, 1, 1 )
+glow_enabled = true
 
-[sub_resource type="StyleBoxEmpty" id=4]
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.592157, 0.137255, 0.87451, 1 )
 
-[sub_resource type="StyleBoxEmpty" id=5]
+[sub_resource type="PlaneMesh" id=5]
+material = SubResource( 4 )
+size = Vector2( 5, 5 )
 
-[node name="MainMenu" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 2.67206, 0.43229, 2.66194 )
+
+[node name="MainMenu" type="Spatial"]
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-first_level = ExtResource( 4 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.05
+anchor_top = 0.1
 anchor_right = 0.95
 anchor_bottom = 1.0
-alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Title" type="Label" parent="VBoxContainer"]
-margin_top = 433.0
 margin_right = 675.0
-margin_bottom = 820.0
+margin_bottom = 387.0
 custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0.898039, 0.764706, 0.835294, 1 )
+custom_colors/font_color_shadow = Color( 0.635294, 0.2, 0.870588, 1 )
 text = "Casual Game Base"
 align = 1
 valign = 1
 autowrap = true
 
-[node name="Sublabel" type="Label" parent="VBoxContainer"]
-margin_top = 824.0
-margin_right = 675.0
-margin_bottom = 900.0
-custom_fonts/font = ExtResource( 2 )
-text = "Tap here to start"
-align = 1
-valign = 1
+[node name="LevelTransition" parent="." instance=ExtResource( 4 )]
 
-[node name="Start" type="Button" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_styles/hover = SubResource( 1 )
-custom_styles/pressed = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/disabled = SubResource( 4 )
-custom_styles/normal = SubResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Platform" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Platform"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Platform/StaticBody"]
+shape = SubResource( 2 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 8.56502, 0 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 3 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.98924, 2.23713, -5.10424 )
+
+[node name="StartGame" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.1, 4 )
+mesh = SubResource( 5 )
+material/0 = null
+script = ExtResource( 5 )
+
+[node name="Area" type="Area" parent="StartGame"]
+
+[node name="CollisionShape" type="CollisionShape" parent="StartGame/Area"]
+shape = SubResource( 6 )

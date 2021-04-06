@@ -1,9 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/test/player/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/test/level_elements/level_end.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/test/level_elements/level_transition.tscn" type="PackedScene" id=3]
 
 [sub_resource type="Environment" id=1]
 ambient_light_color = Color( 1, 1, 1, 1 )
+dof_blur_far_distance = 20.0
+dof_blur_far_transition = 10.0
+dof_blur_far_quality = 0
+glow_enabled = true
+adjustment_enabled = true
+adjustment_brightness = 1.5
+adjustment_saturation = 3.0
 
 [sub_resource type="PlaneMesh" id=2]
 size = Vector2( 15, 15 )
@@ -11,26 +20,119 @@ size = Vector2( 15, 15 )
 [sub_resource type="ConcavePolygonShape" id=3]
 data = PoolVector3Array( 7.5, 0, 7.5, -7.5, 0, 7.5, 7.5, 0, -7.5, -7.5, 0, 7.5, -7.5, 0, -7.5, 7.5, 0, -7.5 )
 
-[node name="level_01" type="Spatial"]
+[sub_resource type="PlaneMesh" id=4]
+size = Vector2( 15, 15 )
+
+[sub_resource type="ConcavePolygonShape" id=5]
+data = PoolVector3Array( 7.5, 0, 7.5, -7.5, 0, 7.5, 7.5, 0, -7.5, -7.5, 0, 7.5, -7.5, 0, -7.5, 7.5, 0, -7.5 )
+
+[node name="Level 1" type="Spatial"]
+
+[node name="LevelTransition" parent="." instance=ExtResource( 3 )]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.713018, 0.701146, 0, -0.701146, 0.713018, 0, 2.65285, 2.97054 )
+transform = Transform( 0.88248, 0.22601, -0.41249, 0.47035, -0.424045, 0.773923, 0, -0.876987, -0.480515, 0, 2.65285, 2.97054 )
 light_energy = 0.8
 shadow_enabled = true
 shadow_color = Color( 0.141176, 0.0509804, 0.203922, 1 )
 
-[node name="Floor" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.33347, 0 )
+[node name="Player" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
+
+[node name="Map" type="Spatial" parent="."]
+
+[node name="Spawn" type="MeshInstance" parent="Map"]
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="StaticBody" type="StaticBody" parent="Floor"]
+[node name="StaticBody" type="StaticBody" parent="Map/Spawn"]
 
-[node name="CollisionShape" type="CollisionShape" parent="Floor/StaticBody"]
+[node name="CollisionShape" type="CollisionShape" parent="Map/Spawn/StaticBody"]
 shape = SubResource( 3 )
 
-[node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9084, 0 )
+[node name="Path1" type="MeshInstance" parent="Map"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.1, -15, 0, 5 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Path1"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Path1/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="Path2" type="MeshInstance" parent="Map"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.1, -15, 0, -5 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Path2"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Path2/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="Platform" type="MeshInstance" parent="Map"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 0 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Platform"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Platform/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="Path3" type="MeshInstance" parent="Map"]
+transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.1, -40, 0, 0 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Path3"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Path3/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="Path7" type="MeshInstance" parent="Map"]
+transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.1, -56.492, 0, 7.5 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Path7"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Path7/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="Path5" type="MeshInstance" parent="Map"]
+transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.1, -49, 0, -6 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Path5"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Path5/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="Path4" type="MeshInstance" parent="Map"]
+transform = Transform( -8.14603e-08, 0, 0.1, 0, 1, 0, -0.5, 0, -1.62921e-08, -44.5, 0, -3 )
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Path4"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Path4/StaticBody"]
+shape = SubResource( 3 )
+
+[node name="Path" type="MeshInstance" parent="Map"]
+transform = Transform( -1.62921e-07, 0, 0.1, 0, 1, 0, -1, 0, -1.62921e-08, -53, 0, 0.75 )
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Map/Path"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/Path/StaticBody"]
+shape = SubResource( 5 )
+
+[node name="LevelEnd" parent="Map" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -67.6909, 0, 5.71607 )
+level_to_load = "res://src/test/levels/level_02.tscn"
