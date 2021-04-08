@@ -24,7 +24,6 @@ fov = 90.0
 [node name="RigidPlayer" type="RigidBody" parent="." groups=[
 "Player",
 ]]
-mass = 5.0
 gravity_scale = 3.0
 script = ExtResource( 1 )
 
@@ -34,3 +33,6 @@ material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidPlayer"]
 shape = SubResource( 3 )
+
+[node name="RayCast" type="RayCast" parent="RigidPlayer"]
+enabled = true
